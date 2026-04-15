@@ -1,0 +1,49 @@
+ORB-SLAM3 Android-Ubuntu Communication Protocol Specification
+Version: 1.0
+Encoding: Little-Endian for all multi-byte integers
+
+FRAME FORMAT
+============
+[Magic:4][Type:1][Timestamp:8][PayloadSize:4][Payload:N][CRC32:4]
+
+Magic     = 0xDEADBEEF (uint32 LE)
+Type      = 0x01..0x04 (uint8)
+Timestamp = Unix time in microseconds (int64 LE)
+Size      = Payload byte count (uint32 LE)
+CRC32     = CRC32 checksum over all bytes except the checksum itself (uint32 LE)
+
+DATA TYPES
+==========
+0x01  Camera Frame   Android -> Ubuntu   YUV420/NV21 raw image bytes
+0x02  IMU Data       Android -> Ubuntu   9 x float32 sensor values
+0x03  Pose           Ubuntu  -> Android  7 x float32 position+quaternion
+0x04  Map Data       Android -> Ubuntu   N x float32 point cloud
+
+IMU PAYLOAD (36 bytes fixed)
+============================
+Bytes  0- 3  accel_x  float32 LE  m/s^2
+Bytes  4- 7  accel_y  float32 LE  m/s^2
+Bytes  8-11  accel_z  float32 LE  m/s^2
+Bytes 12-15  gyro_x   float32 LE  rad/s
+Bytes 16-19  gyro_y   float32 LE  rad/s
+Bytes 20-23  gyro_z   float32 LE  rad/s
+Bytes 24-27  mag_x    float32 LE  uT
+Bytes 28-31  mag_y    float32 LE  uT
+Bytes 32-35  mag_z    float32 LE  uT
+
+POSE PAYLOAD (28 bytes fixed)
+==============================
+Bytes  0- 3  pos_x    float32 LE  meters
+Bytes  4- 7  pos_y    float32 LE  meters
+Bytes  8-11  pos_z    float32 LE  meters
+Bytes 12-15  quat_x   float32 LE  unit quaternion
+Bytes 16-19  quat_y   float32 LE
+Bytes 20-23  quat_z   float32 LE
+Bytes 24-27  quat_w   float32 LE
+
+ERROR HANDLING
+==============
+- Invalid magic: discard frame, log warning
+- CRC mismatch:  discard frame, increment error counter
+- Short read:    wait for more data or close connection
+- Unknown type:  log warning, skip frame
