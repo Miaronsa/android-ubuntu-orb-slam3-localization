@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ORB-SLAM3 Localizer</string>
+    <string name="title_server_config">Server Configuration</string>
+    <string name="hint_server_ip">Server IP Address</string>
+    <string name="hint_server_port">Server Port</string>
+    <string name="label_camera_fps">Camera FPS</string>
+    <string name="label_imu_rate">IMU Sample Rate (Hz)</string>
+    <string name="btn_start_collection">Start Collection</string>
+    <string name="btn_stop_collection">Stop Collection</string>
+    <string name="status_idle">Status: Idle</string>
+    <string name="status_collecting">Status: Collecting...</string>
+    <string name="status_stopped">Status: Stopped</string>
+    <string name="connection_disconnected">Disconnected</string>
+    <string name="permission_denied">Required permissions not granted</string>
+</resources>
