@@ -20,8 +20,7 @@ class FrameBuffer:
     async def put(self, frame: dict) -> bool:
         async with self._lock:
             if len(self._buffer) >= self.max_size:
-                logger.warning("Frame buffer full, dropping oldest frame")
-                self._buffer.popleft()
+                logger.warning("Frame buffer full, oldest frame will be dropped")
             self._buffer.append(frame)
             self._event.set()
             return True
